@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.zerohunger";
+option java_outer_classname = "ZeroHungerProto";
+
+package zerohunger;
+
+// Service 1: Soil Monitor Service (Unary RPC)
+service SoilMonitorService {
+  rpc CheckSoilMoisture(SensorRequest) returns (SoilStatusResponse);
+}
+
+// Service 2: Weather Forecast Service (Server-streaming RPC)
+service WeatherForecastService {
+  rpc GetForecast(RegionRequest) returns (stream WeatherResponse);
+}
+
+// Service 3: Fertilizer Submission Service (Client-streaming RPC)
+service FertilizerSubmissionService {
+  rpc SendFertilizerHistory(stream FertilizerInput) returns (FertilizerAnalysis);
+}
+
+// Service 4: Farm Control Service (Bidirectional streaming RPC)
+service FarmControlService {
+  rpc Interact(stream DecisionRequest) returns (stream AdvisoryResponse);
+}
+
+//Message Definitions
+
+// SoilMonitorService
+message SensorRequest {
+  string sensorId = 1;
+  string timestamp = 2;
+}
+
+message SoilStatusResponse {
+  string moisture = 1;        // e.g. "Low"
+  float nitrogenLevel = 2;    // e.g. 30.5
+}
+
+// WeatherForecastService
+message RegionRequest {
+  string regionName = 1;
+}
+
+message WeatherResponse {
+  string date = 1;
+  float temperature = 2;
+  float humidity = 3;
+  float rainChance = 4;
+}
+
+// FertilizerSubmissionService
+message FertilizerInput {
+  string fertilizerType = 1;
+  float amountKg = 2;
+  string applicationDate = 3;
+}
+
+message FertilizerAnalysis {
+  string advice = 1;
+}
+
+// FarmControlService
+message DecisionRequest {
+  string inputType = 1; // e.g. "WeatherAlert"
+  string value = 2;     // e.g. "Storm incoming"
+}
+
+message AdvisoryResponse {
+  string advice = 1;    // e.g. "Activate irrigation stop. Secure equipment."
+}
