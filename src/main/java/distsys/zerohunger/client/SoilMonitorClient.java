@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package distsys.zerohunger.client;
 
 import com.zerohunger.SoilMonitorServiceGrpc;
@@ -9,6 +5,10 @@ import com.zerohunger.SoilStatusResponse;
 import com.zerohunger.SensorRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
+import io.grpc.Status;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -18,29 +18,31 @@ public class SoilMonitorClient {
 
     public static void main(String[] args) {
 
-        // Build the gRPC channel to connect to server running on localhost at port 50051
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50051)
-                .usePlaintext() // No SSL for local testing
+                .usePlaintext()
                 .build();
 
-        // Create a blocking stub to call unary RPC method
         SoilMonitorServiceGrpc.SoilMonitorServiceBlockingStub stub
-                = SoilMonitorServiceGrpc.newBlockingStub(channel);
+                = SoilMonitorServiceGrpc.newBlockingStub(channel)
+                        .withDeadlineAfter(3, TimeUnit.SECONDS); //DEADLINE
 
-        // Create a request object with sample data
         SensorRequest request = SensorRequest.newBuilder()
                 .setSensorId("SENSOR_001")
                 .setTimestamp("2025-08-04T09:00:00Z")
                 .build();
 
-        // Send the request and get the response
-        SoilStatusResponse response = stub.checkSoilMoisture(request);
+        try {
+            SoilStatusResponse response = stub.checkSoilMoisture(request);
 
-        // Print the received moisture and nitrogen level
-        System.out.println("Soil Moisture Level: " + response.getMoisture());
-        System.out.println("Nitrogen Level: " + response.getNitrogenLevel());
+            System.out.println("Soil Moisture Level: " + response.getMoisture());
+            System.out.println("Nitrogen Level: " + response.getNitrogenLevel());
 
-        // Close the channel after use
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.DEADLINE_EXCEEDED) {
+                System.err.println("Request timed out.");
+            }
+        }
+
         channel.shutdown();
     }
 }

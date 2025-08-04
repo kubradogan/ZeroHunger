@@ -3,6 +3,7 @@ package distsys.zerohunger.server;
 import distsys.zerohunger.jmdns.JmDNSServiceRegistration;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+
 import java.io.IOException;
 
 /**
@@ -10,33 +11,32 @@ import java.io.IOException;
  * @author kubraveli
  */
 /**
- * This class starts a gRPC server to host the SoilMonitorService. It listens
- * for incoming requests and routes them to the service implementation.
+ * This class launches a gRPC server to run the FertilizerSubmissionService. It
+ * registers the service with jmDNS for network discovery and handles incoming
+ * fertilizer data.
  */
-public class SoilMonitorServer {
+public class FertilizerSubmissionServer {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        // The server will run on this port
-        int port = 50051;
+        int port = 50053;
 
-        // Register the service via jmDNS so clients can discover it
+        // Register service with jmDNS so clients can find it
         JmDNSServiceRegistration jmdnsService = new JmDNSServiceRegistration();
-        jmdnsService.registerService("_soilmonitor._tcp.local.", "SoilMonitorService", port);
+        jmdnsService.registerService("_fertilizersubmission._tcp.local.", "FertilizerSubmissionService", port);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             jmdnsService.unregisterService();
             System.out.println("SoilMonitorService unregistered");
         }));
 
-        // Start gRPC server
+        // Start gRPC server and bind it to the FertilizerSubmissionService
         Server server = ServerBuilder.forPort(port)
-                .addService(new SoilMonitorServiceImpl())
+                .addService(new FertilizerSubmissionServiceImpl())
                 .build();
 
         server.start();
-        System.out.println("SoilMonitorService is running on port " + port);
+        System.out.println("FertilizerSubmissionService is running on port " + port);
 
         server.awaitTermination();
     }
 }
-
