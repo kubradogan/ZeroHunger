@@ -16,6 +16,7 @@ com/zerohunger/WeatherResponse$Builder.class
 com/zerohunger/DecisionRequest$Builder.class
 com/zerohunger/FertilizerAnalysis$1.class
 com/zerohunger/FertilizerSubmissionServiceGrpc$3.class
+distsys/zerohunger/server/SoilMonitorServer.class
 com/zerohunger/SoilMonitorServiceGrpc$SoilMonitorServiceFutureStub.class
 com/zerohunger/SoilStatusResponse.class
 com/zerohunger/ZeroHungerProto.class
@@ -55,6 +56,7 @@ com/zerohunger/WeatherForecastServiceGrpc$MethodHandlers.class
 com/zerohunger/FarmControlServiceGrpc$FarmControlServiceFutureStub.class
 com/zerohunger/RegionRequestOrBuilder.class
 com/zerohunger/FertilizerSubmissionServiceGrpc$MethodHandlers.class
+distsys/zerohunger/client/SoilMonitorClient.class
 com/zerohunger/DecisionRequestOrBuilder.class
 com/zerohunger/FertilizerSubmissionServiceGrpc$FertilizerSubmissionServiceBlockingStub.class
 com/zerohunger/SoilStatusResponseOrBuilder.class
@@ -68,6 +70,7 @@ com/zerohunger/FertilizerInput$1.class
 com/zerohunger/SoilMonitorServiceGrpc.class
 com/zerohunger/FarmControlServiceGrpc$FarmControlServiceStub.class
 com/zerohunger/SoilMonitorServiceGrpc$1.class
+distsys/zerohunger/server/SoilMonitorServiceImpl.class
 com/zerohunger/FertilizerSubmissionServiceGrpc$AsyncService.class
 com/zerohunger/WeatherForecastServiceGrpc$AsyncService.class
 com/zerohunger/SensorRequest$1.class
